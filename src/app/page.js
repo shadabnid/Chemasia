@@ -7,6 +7,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import pharmaLogo from '@/../public/images/pharmaLogo.png'
 
 export default function Home() {
+  
   const images = [
     "/images/pexels-rpnickson-2526128.jpg", // Replace with your image URLs
     "/images/pexels-jmark-253096.jpg",
@@ -23,7 +24,7 @@ export default function Home() {
       {/* navbar */}
       <div className="flex justify-between px-4 items-center h-[4rem] bg-form-bg">
         <span className="text-[1.5rem]">
-          <Image src={pharmaLogo} alt="logo" className="w-[3rem] h-[3rem]" />
+          <Image src={pharmaLogo} alt="logo" className="w-[4rem] h-[4rem]" />
         </span>
         {/* <span>Menu</span> */}
       </div>
@@ -56,13 +57,13 @@ export default function Home() {
       {/* vision mission */}
       <div className="lg:flex gap-10 lg:px-[4rem]">
         <div className="mx-6 lg:mx-0 mt-6 border border-border-color rounded-xl shadow-md pt-10 px-3 pb-4 bg-form-bg lg:w-[45rem] lg:px-6 lg:pb-0 lg:h-[38rem]">
-          <h1 className="text-[1.8rem] text-center font-semibold"><span className="text-primary-color font-extrabold">Welcome</span> To Our Website</h1>
+          <h1 className="text-[1.8rem] text-center font-semibold text-gray-800"><span className="text-button-hover font-extrabold">Welcome</span> To Our Website</h1>
           <div>
-            <p><span className="text-primary-color">Vision : </span> Our vision is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
+            <p className="text-gray-700"><span className="text-button-hover">Vision : </span> Our vision is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
           </div>
 
           <div className="mt-6">
-            <p><span className="text-primary-color">Mission : </span> Our vision is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
+            <p className="text-gray-700"><span className="text-button-hover">Mission : </span> Our vision is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
           </div>
 
           <div className="flex justify-center items-center">
