@@ -2,22 +2,25 @@ import mongoose from "mongoose";
 
 
 const config = {
-    isConnected:0
+    isConnected: 0
 }
 
-export async function dbConnect(){
-    if(config.isConnected){
+export async function dbConnect() {
+    if (config.isConnected) {
         return;
     }
 
     try {
-        const {connection} = await mongoose.connect(process.env.MONGO_URL,{dbName:"chemasia"})
+        const { connection } = await mongoose.connect(process.env.MONGO_URL, {
+            dbName: "chemasia", useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
         console.log("DB connected Successfully");
         config.isConnected = connection._readyState;
         return connection
     } catch (error) {
         console.log("Error in DB connection");
         console.log(error);
-        
+
     }
 }
