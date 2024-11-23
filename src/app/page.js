@@ -60,9 +60,9 @@ export default function Home() {
     setIsLoading(true);
     try {
       const res = await axios.post('/api/query', formData);
-      if (res.statusText) {
-        setIsLoading(false);
-      }
+
+      setIsLoading(false);
+
       setFormData({
         name: "",
         email: "",
@@ -125,11 +125,11 @@ export default function Home() {
             <p className="text-gray-700"><span className="text-button-hover">Mission : </span> Our mission is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
           </div>
 
-          <div className="flex justify-center items-center">
+          {/* <div className="flex justify-center items-center">
             <button className="bg-primary-color text-white w-[10rem] h-[3rem] mt-5 text-[1.2rem] rounded-xl hover:bg-button-hover">
               Read More
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* medicine card */}

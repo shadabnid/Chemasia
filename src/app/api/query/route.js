@@ -33,8 +33,8 @@ export async function POST(req) {
 
     // Email setup using Nodemailer
     const transporter = nodemailer.createTransport({
-      host: "smtpout.secureserver.net", // GoDaddy SMTP server
-      port: 465, // SSL port
+      host: process.env.EMAIL_HOST, // GoDaddy SMTP server
+      port: process.env.EMAIL_PORT, // SSL port
       secure: true, // SSL
       auth: {
         user: "info@chemasia.in", // Replace with your GoDaddy email

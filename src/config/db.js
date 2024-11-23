@@ -12,8 +12,8 @@ export async function dbConnect() {
 
     try {
         const { connection } = await mongoose.connect(process.env.MONGO_URL, {
-            dbName: "chemasia", useNewUrlParser: true,
-            useUnifiedTopology: true,
+            dbName: "chemasia",
+            
         })
         console.log("DB connected Successfully");
         config.isConnected = connection._readyState;
