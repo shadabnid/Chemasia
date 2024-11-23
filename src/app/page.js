@@ -18,7 +18,7 @@ import axios from "axios";
 const override = {
   display: "block",
   margin: "0 auto",
-  borderColor: "red",
+  borderColor: "white",
 };
 
 export default function Home() {
@@ -27,49 +27,60 @@ export default function Home() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-
     phone: "",
     message: "",
   });
+
+  // Validation added: Helper function to validate email and phone
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const isValidPhone = (phone) => /^\d{10}$/.test(phone);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-
-
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
+
+    // Validation added: Check if all fields are filled and valid
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      return toast.error("All fields are required!");
+    }
+    if (!isValidEmail(formData.email)) {
+      return toast.error("Please enter a valid email!");
+    }
+    if (!isValidPhone(formData.phone)) {
+      return toast.error("Please enter a valid 10-digit phone number!");
+    }
+
+    setIsLoading(true);
     try {
       const res = await axios.post('/api/query', formData);
       if (res.statusText) {
         setIsLoading(false);
       }
-      formData.name = "";
-      formData.email = "";
-      formData.message = "";
-      formData.phone = "";
-      return toast(res?.data?.message);
-
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      return toast.success(res?.data?.message);
     } catch (error) {
       setIsLoading(false);
-      return toast('your Query is Not submitted')
-      // console.log(error);
-
+      return toast.error("Your query was not submitted.");
     }
-  }
+  };
 
   const images = [
-    "/images/doctor-8264057_1280.jpg", // Replace with your image URLs
+    "/images/doctor-8264057_1280.jpg",
     "/images/hospital-3089884_1280.jpg",
     "/images/approximately-3758130_1280.jpg",
-
   ];
-
 
   return (
     <div>
@@ -79,15 +90,10 @@ export default function Home() {
         <span className="text-[1.5rem]">
           <Image src={pharmaLogo} alt="logo" className="w-[4rem] h-[4rem]" />
         </span>
-        {/* <span>Menu</span> */}
       </div>
 
-      {/* <div className="mt-5 flex flex-col border border-black justify-center items-center">
-        <span>Contact number</span>
-        <span>email</span>
-      </div> */}
       {/* image slider */}
-      <div className="w-full  mx-auto mt-4">
+      <div className="w-full mx-auto mt-4">
         <Carousel
           showThumbs={false}
           showStatus={false}
@@ -116,7 +122,7 @@ export default function Home() {
           </div>
 
           <div className="mt-6">
-            <p className="text-gray-700"><span className="text-button-hover">Mission : </span> Our vision is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
+            <p className="text-gray-700"><span className="text-button-hover">Mission : </span> Our mission is to be a leading pharmaceutical company in India and to become a significant global player by providing high quality, affordable and innovative solutions in medicine and treatment.</p>
           </div>
 
           <div className="flex justify-center items-center">
@@ -126,9 +132,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* medicin card */}
+        {/* medicine card */}
         <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:gap-8 justify-center gap-4 items-center mx-4">
-
           <Card image_url={AntiBiotic} text="Anti-Biotics" />
           <Card image_url={AntiFungal} text="Anti-Fungal" />
           <Card image_url={AntiHistamine} text="Anti-Histamine" />
@@ -137,16 +142,21 @@ export default function Home() {
           <Card image_url={Syrup} text="Gastric Products" />
         </div>
       </div>
+
       {/* contact form */}
-      <form className="border border-border-color px-10 py-4 flex flex-col gap-4 my-6 mx-4 sm:mx-12 rounded-xl bg-form-bg text-gray-500 lg:w-[40rem] lg:mx-auto mt-10" >
+      <form
+        onSubmit={handleSubmit}
+        className="border border-border-color px-10 py-4 flex flex-col gap-4 my-6 mx-4 sm:mx-12 rounded-xl bg-form-bg text-gray-500 lg:w-[40rem] lg:mx-auto mt-10"
+      >
         <h1 className="text-center text-[1.4rem]">Enquiry Form</h1>
         <input
           type="text"
           name="name"
           placeholder="Name"
-          className="px-3 py-2  outline-none border border-gray-300 rounded-lg shadow-sm"
+          className="px-3 py-2 outline-none border border-gray-300 rounded-lg shadow-sm"
           value={formData.name}
           onChange={handleChange}
+          required // Validation added: Marked as required
         />
         <input
           type="text"
@@ -154,15 +164,33 @@ export default function Home() {
           placeholder="Phone"
           className="px-3 py-2 outline-none border border-gray-300 rounded-lg shadow-sm"
           value={formData.phone}
-          onChange={handleChange}
+          onChange={(e) => {
+            // Ensure only digits are allowed in the phone field
+            const { value } = e.target;
+            if (/^\d*$/.test(value) && value.length <= 10) {
+              setFormData((prevData) => ({
+                ...prevData,
+                phone: value,
+              }));
+            }
+          }}
+          onBlur={() => {
+            // Ensure the field has exactly 10 digits
+            if (formData.phone.length !== 10) {
+              alert("Phone number must be exactly 10 digits.");
+            }
+          }}
+
+          required // Validation added: Marked as required
         />
         <input
-          type="text"
+          type="email"
           name="email"
           placeholder="Email"
           className="px-3 py-2 outline-none border border-gray-300 rounded-lg shadow-sm"
           value={formData.email}
           onChange={handleChange}
+          required // Validation added: Marked as required
         />
         <textarea
           id="message"
@@ -172,39 +200,36 @@ export default function Home() {
           onChange={handleChange}
           placeholder="Write your message here..."
           className="w-full p-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm outline-none resize-none"
+          required // Validation added: Marked as required
         />
         <div className="flex justify-center items-center">
           <button
-            onClick={handleSubmit}
-            className="w-[10rem] h-[h-3rem] bg-primary-color text-white py-2 rounded-lg hover:bg-button-hover"
+            type="submit"
+            className="w-[10rem] h-[3rem] bg-primary-color text-white py-2 rounded-lg hover:bg-button-hover"
           >
-            {
-              isLoading ? (
-                <ClipLoader
-                  color={color}
-                  loading={isLoading}
-                  cssOverride={override}
-                  size={24}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
-              ):(
-               <span>Submit</span> 
-              )
-            }
-            
+            {isLoading ? (
+              <ClipLoader
+                color={color}
+                loading={isLoading}
+                cssOverride={override}
+                size={24}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <span>Submit</span>
+            )}
           </button>
         </div>
       </form>
 
-      <footer className=" md:flex md:justify-between  bg-primary-color text-white py-3">
+      <footer className=" md:flex md:justify-between bg-primary-color text-white py-3">
         <div className="flex flex-col gap-3 ml-10">
           <span>Mobile : +918210783479</span>
           <span>Email : info@chemasia.in</span>
         </div>
         <p className="mt-4 ml-10 ">© 2022 Chemasia Pharmaceuticals. All Rights Reserved.</p>
       </footer>
-
     </div>
   );
 }

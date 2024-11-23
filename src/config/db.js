@@ -13,7 +13,8 @@ export async function dbConnect(){
     try {
         const {connection} = await mongoose.connect(process.env.MONGO_URL,{dbName:"chemasia"})
         console.log("DB connected Successfully");
-        config.isConnected = connection.readyState;
+        config.isConnected = connection._readyState;
+        return connection
     } catch (error) {
         console.log("Error in DB connection");
         console.log(error);
